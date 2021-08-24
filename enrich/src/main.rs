@@ -35,7 +35,8 @@ fn main() -> io::Result<()> {
 
         let game_moves = match con.get(game) {
             Ok(skytable::types::Str::Unicode(s)) => Some(s),
-            Ok(_) => panic!("unicode expected"),
+            Ok(skytable::types::Str::Binary(s)) => panic!("unicode expected, got {:?} for {}", s, game),
+            Ok(_) => panic!("unexpected data type"),
             Err(skytable::error::Error::SkyError(SkyhashError::Code(skytable::RespCode::NotFound))) => None,
             Err(err) => panic!("{}", err),
         };
