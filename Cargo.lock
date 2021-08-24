@@ -78,6 +78,7 @@ dependencies = [
  "bzip2",
  "pgn-reader",
  "shakmaty",
+ "skytable",
 ]
 
 [[package]]
@@ -123,6 +124,12 @@ dependencies = [
  "bitflags",
  "btoi",
 ]
+
+[[package]]
+name = "skytable"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1fd03c4a189af4aa1585ef0d0a8ea2b964d0f192daf22eec49ad6658f32f6fba"
 
 [[package]]
 name = "slice-deque"
