@@ -1,0 +1,9 @@
+[package]
+name = "make-skytable"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+bzip2 = "0.4"
+pgn-reader = "0.18"
+shakmaty = "0.19"
