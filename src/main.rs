@@ -5,6 +5,7 @@ use std::str;
 
 use itertools::Itertools as _;
 use skytable::Connection;
+use skytable::actions::Actions;
 
 use pgn_reader::{BufferedReader, Visitor, RawHeader, Skip};
 use shakmaty::{Chess, Position as _ };
@@ -68,7 +69,7 @@ impl Visitor for Importer {
 
     fn end_game(&mut self) {
         if let Some(id) = self.id.take() {
-            println!("{} {}", id, self.moves.iter().join(" "));
+            self.con.set(id, self.moves.iter().join(" ")).expect("skytable set");
         }
     }
 }
