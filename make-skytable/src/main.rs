@@ -69,7 +69,9 @@ impl Visitor for Importer {
 
     fn end_game(&mut self) {
         if let Some(id) = self.id.take() {
-            self.con.set(id, self.moves.iter().join(" ")).expect("skytable set");
+            if !self.moves.is_empty() {
+                self.con.set(id, self.moves.iter().join(" ")).expect("skytable set");
+            }
         }
     }
 }
