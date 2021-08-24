@@ -5,6 +5,7 @@ edition = "2018"
 
 [dependencies]
 bzip2 = "0.4"
+itertools = "0.10"
 pgn-reader = "0.18"
 shakmaty = "0.19"
 skytable = "0.5"

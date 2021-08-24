@@ -3,11 +3,13 @@ use std::io;
 use std::fs::File;
 use std::str;
 
+use itertools::Itertools as _;
+use skytable::Connection;
+
 use pgn_reader::{BufferedReader, Visitor, RawHeader, Skip};
 use shakmaty::{Chess, Position as _ };
 use shakmaty::san::{SanPlus};
 use shakmaty::uci::Uci;
-use skytable::Connection;
 
 struct Importer {
     con: Connection,
@@ -53,10 +55,12 @@ impl Visitor for Importer {
     }
 
     fn san(&mut self, san_plus: SanPlus) {
-        if self.id.is_some() {
+        if let Some(ref id) = self.id {
             if let Ok(m) = san_plus.san.to_move(&self.pos) {
+                self.moves.push(Uci::from_standard(&m));
                 self.pos.play_unchecked(&m);
             } else {
+                println!("Illegal move in {}", id);
                 self.id = None;
             }
         }
@@ -64,7 +68,7 @@ impl Visitor for Importer {
 
     fn end_game(&mut self) {
         if let Some(id) = self.id.take() {
-            println!("{} {:?}", id, self.moves);
+            println!("{} {}", id, self.moves.iter().join(" "));
         }
     }
 }
