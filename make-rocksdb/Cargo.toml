@@ -1,5 +1,5 @@
 [package]
-name = "make-skytable"
+name = "make-rocksdb"
 version = "0.1.0"
 edition = "2018"
 
@@ -7,5 +7,5 @@ edition = "2018"
 bzip2 = "0.4"
 itertools = "0.10"
 pgn-reader = "0.18"
+rocksdb = "0.17"
 shakmaty = "0.19"
-skytable = "0.5"

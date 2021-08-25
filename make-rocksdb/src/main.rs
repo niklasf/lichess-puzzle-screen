@@ -4,8 +4,7 @@ use std::fs::File;
 use std::str;
 
 use itertools::Itertools as _;
-use skytable::Connection;
-use skytable::actions::Actions;
+use rocksdb::DB;
 
 use pgn_reader::{BufferedReader, Visitor, RawHeader, Skip};
 use shakmaty::{Chess, Position as _ };
@@ -13,19 +12,21 @@ use shakmaty::san::{SanPlus};
 use shakmaty::uci::Uci;
 
 struct Importer {
-    con: Connection,
+    db: DB,
     pos: Chess,
     id: Option<String>,
     moves: Vec<Uci>,
+    date: String,
 }
 
 impl Importer {
     fn new() -> io::Result<Importer> {
         Ok(Importer {
-            con: Connection::new("127.0.0.1", 2003)?,
+            db: DB::open_default("/scratch").unwrap(),
             id: None,
             pos: Chess::default(),
             moves: Vec::new(),
+            date: String::new(),
         })
     }
 }
@@ -48,6 +49,12 @@ impl Visitor for Importer {
                 .unwrap()
                 .strip_prefix("https://lichess.org/")
                 .map(|s| s.to_owned());
+        } else if key == b"UTCDate" {
+            let date = str::from_utf8(value.as_bytes()).unwrap();
+            if self.date != date {
+                println!("- {}", date);
+                self.date = date.to_owned();
+            }
         }
     }
 
@@ -69,9 +76,7 @@ impl Visitor for Importer {
 
     fn end_game(&mut self) {
         if let Some(id) = self.id.take() {
-            if !self.moves.is_empty() {
-                self.con.set(id, self.moves.iter().join(" ")).expect("skytable set");
-            }
+            self.db.put(id, self.moves.iter().join(" ")).expect("rocks db put");
         }
     }
 }
