@@ -3,6 +3,16 @@
 version = 3
 
 [[package]]
+name = "add-game-moves"
+version = "0.1.0"
+dependencies = [
+ "csv",
+ "rocksdb",
+ "serde",
+ "shakmaty",
+]
+
+[[package]]
 name = "arrayvec"
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -273,16 +283,6 @@ name = "regex-syntax"
 version = "0.6.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f497285884f3fcff424ffc933e56d7cbca511def0c9831a7f9b5f6153e3cc89b"
-
-[[package]]
-name = "repetitions"
-version = "0.1.0"
-dependencies = [
- "csv",
- "rocksdb",
- "serde",
- "shakmaty",
-]
 
 [[package]]
 name = "rocksdb"
