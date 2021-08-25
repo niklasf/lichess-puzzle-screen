@@ -3,8 +3,7 @@ use std::io;
 use std::str;
 
 use serde::Deserialize;
-use skytable::actions::Actions as _;
-use skytable::error::SkyhashError;
+use rocksdb::DB;
 
 #[derive(Debug, Deserialize)]
 struct Puzzle {
@@ -20,7 +19,7 @@ struct Puzzle {
 }
 
 fn main() -> io::Result<()> {
-    let mut con = skytable::Connection::new("127.0.0.1", 2003)?;
+    let db = DB::open_for_read_only(&rocksdb::Options::default(), "/scratch", true).expect("rocksdb");
     let mut reader = csv::ReaderBuilder::new()
         .has_headers(false)
         .from_path(env::args().nth(1).expect("csv as argument"))?;
@@ -33,13 +32,7 @@ fn main() -> io::Result<()> {
         let game = game.strip_suffix("/black").unwrap_or(game);
         let _ply: u32 = game_and_ply.next().expect("ply").parse().unwrap();
 
-        let game_moves = match con.get(game) {
-            Ok(skytable::types::Str::Unicode(s)) => Some(s),
-            Ok(skytable::types::Str::Binary(s)) => Some(String::from_utf8(s).expect("actually unicode")),
-            Ok(_) => panic!("unexpected data type for {}", game),
-            Err(skytable::error::Error::SkyError(SkyhashError::Code(skytable::RespCode::NotFound))) => None,
-            Err(err) => panic!("{} for {}", err, game),
-        };
+        let game_moves = db.get(game).expect("rocksdb get").map(|val| String::from_utf8(val).expect("unicode"));
 
         if let Some(game_moves) = game_moves {
             println!("{},{},{},{},{},{},{},{},{},{}", puzzle.id, puzzle.fen, puzzle.moves, puzzle.rating, puzzle.rd, puzzle.popularity, puzzle.played, puzzle.themes, puzzle.url, game_moves);

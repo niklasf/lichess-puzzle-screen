@@ -5,6 +5,6 @@ edition = "2018"
 
 [dependencies]
 csv = "1"
+rocksdb = "0.17"
 serde = { version = "1", features = ["derive"] }
 shakmaty = "0.19"
-skytable = "0.5"
