@@ -1,7 +1,8 @@
 import chess
 import csv
+import sys
 
-with open("../enrich/enriched.csv") as f:
+with open(sys.argv[1]) as f:
     for row in csv.reader(f):
         puzzle_id, fen, puzzle_moves, rating, deviation, popularity, played, themes, url, game_moves = row
 
