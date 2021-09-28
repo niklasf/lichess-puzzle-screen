@@ -26,3 +26,7 @@ See https://github.com/lichess-org/tactics/issues/101#issuecomment-909176503.
 
 Find puzzle positions that look like they have more castling rights than they
 do. See https://github.com/lichess-org/tactics/issues/101#issuecomment-909246532.
+
+### `duplicate-position`
+
+There is already a puzzle with the same position.
