@@ -22,7 +22,7 @@ struct Importer {
 impl Importer {
     fn new() -> io::Result<Importer> {
         Ok(Importer {
-            db: DB::open_default("/scratch").unwrap(),
+            db: DB::open_default("db").unwrap(),
             id: None,
             pos: Chess::default(),
             moves: Vec::new(),

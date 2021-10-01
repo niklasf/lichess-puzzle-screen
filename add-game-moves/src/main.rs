@@ -19,7 +19,7 @@ struct Puzzle {
 }
 
 fn main() -> io::Result<()> {
-    let db = DB::open_for_read_only(&rocksdb::Options::default(), "/scratch", true).expect("rocksdb");
+    let db = DB::open_for_read_only(&rocksdb::Options::default(), "../make-rocksdb/db", true).expect("rocksdb");
     let mut reader = csv::ReaderBuilder::new()
         .has_headers(false)
         .from_path(env::args().nth(1).expect("csv as argument"))?;
